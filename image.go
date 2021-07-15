@@ -30,12 +30,15 @@ func (h *HeatMapImage) Bounds() image.Rectangle {
 }
 
 func (h *HeatMapImage) At(x, y int) color.Color {
-	normed := float64(h.heatmap.CountsInts2D[y][x]) / float64(h.max)
+	cnt := h.heatmap.CountsInts2D[y][x] & (1<<24 - 1)
+	r := (cnt >> 16)
+	g := (cnt >> 8)
+	b := cnt
 
 	return color.RGBA{
-		R: 0,
-		G: 0,
-		B: uint8(normed * (1<<8 - 1)),
+		R: uint8(r),
+		G: uint8(g),
+		B: uint8(b),
 		A: 255,
 	}
 }
